@@ -321,6 +321,13 @@ void keyPressed() {
     rightKey = true;
   }
 
+  if (isGameOver) {
+    if (key == 'r' || key == 'R') {
+      resetGame();
+    }
+    return;
+  }
+
   // 発射
   if (key == ' ' && shotTimer >= shotInterval) {
 
