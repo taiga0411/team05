@@ -1,96 +1,109 @@
 class Gate {
 
   // 座標
-  float x;
-  float y;
+  float x, y;
+
+  // 大きさ
+  float w, h;
 
   // 移動速度
   float speed;
 
-  // ゲートの値（+5、-3など）
-  int value;
+  // ゲートの種類
+  // "+"：加算
+  // "×"：倍率
+  String type;
 
-  // 大きさ
-  float w;
-  float h;
+  // 効果の値
+  int value;
+  int timer = 0;
 
   // コンストラクタ
-  Gate(float x, float y) {
+  Gate(float x, float y, int level) {
 
     this.x = x;
     this.y = y;
 
     speed = 2;
-
-    // ランダムで +5 ～ +10 または -1 ～ -5
-    if (random(1) < 0.5) {
-      value = int(random(5, 11));
-    } else {
-      value = -int(random(1, 6));
-    }
-
     w = 100;
     h = 60;
-  }
 
+   // ランダムでゲートを生成
+if (random(1) < 0.5) {
+  type = "+";
+  value = int(random(2, 8));
+} else {
+  type = "-";
+  value = -int(random(2 + level, 8 + level));
+}
+  }
   // 更新
   void update() {
-    y += speed;
+
+  y += speed;
+
+  timer++;
+
+  // 2秒ごと（60fpsなら120フレーム）
+  if (timer >= 120) {
+
+    if (value < 0) {
+      value--;
+    }
+
+    timer = 0;
   }
+}
 
   // 描画
   void display() {
 
     rectMode(CENTER);
 
-    if (value >= 0) {
-      fill(0, 200, 255);
-    } else {
-      fill(255, 80, 80);
-    }
+   if (value >= 0) {
+  fill(0, 180, 255);   // 青
+} else {
+  fill(255, 80, 80);   // 赤
+}
 
     stroke(0);
-    rect(x, y, w, h);
+    strokeWeight(2);
+    rect(x, y, w, h, 10);
 
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(24);
+    String str;
 
-    if (value > 0) {
-      text("+" + value, x, y);
-    } else {
-      text(value, x, y);
-    }
+if (value >= 0) {
+  str = "+" + value;
+} else {
+  str = "" + value;
+}
+
+text(str, x, y);
   }
 
-  // 弾が当たった時
-  void damage(int attack) {
+// 弾が当たったらゲートの値を増やす
+void increase(int attack) {
+  value += attack;
+}
+  // プレイヤーに効果を適用
+void apply(Player player) {
+  player.addCount(value);
+}
 
-    if (value > 0) {
-      value -= attack;
+  // プレイヤーとの当たり判定
+  boolean hit(Player player) {
 
-      if (value < 0) {
-        value = 0;
-      }
-    }
-
-    if (value < 0) {
-      value += attack;
-
-      if (value > 0) {
-        value = 0;
-      }
-    }
-  }
-
-  // ゲートが0になったか
-  boolean isFinished() {
-    return value == 0;
+    return player.x > x - w/2 &&
+           player.x < x + w/2 &&
+           player.y > y - h/2 &&
+           player.y < y + h/2;
   }
 
   // 画面外判定
   boolean isOut() {
     return y > height + h;
   }
-
 }
