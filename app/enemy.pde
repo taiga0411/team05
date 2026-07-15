@@ -16,12 +16,12 @@ class Enemy {
     int sec = frameCount / 60;
 
     // HP：15秒ごとに+1
-    hp = 1 + sec / 15;
+    hp = 15 + sec / 1;
 
     // Speed：10秒ごとに+0.2
     speed = 2 + (sec / 10) * 0.2;
 
-    size = 30;
+    size = 50;
   }
 
   void update() {
@@ -50,8 +50,15 @@ class Enemy {
 
     stroke(0);
     ellipse(0, 0, size, size);
+    
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    text(hp, 0, 0);
 
     popMatrix();
+    
+
   }
 
   void damage(int attack) {
