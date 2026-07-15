@@ -29,12 +29,14 @@ class Gate {
     h = 60;
 
    // ランダムでゲートを生成
-if (random(1) < 0.5) {
+
+if (random(1) < 0.3) {
   type = "+";
   value = int(random(2, 8));
+
 } else {
   type = "-";
-  value = -int(random(2 + level, 8 + level));
+  value = -(int(random(15 + level * 2, 30 + level * 3)));
 }
   }
   // 更新
