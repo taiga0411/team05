@@ -15,6 +15,8 @@ boolean rightKey = false;
 int enemyTimer = 0;
 int gateTimer = 0;
 
+boolean isGameOver = false;
+
 // 発射クールタイム
 int shotTimer = 0;
 int shotInterval = 20;   // 20フレームごとに発射
@@ -32,6 +34,11 @@ void setup() {
 
 
 void draw() {
+
+  if (isGameOver) {
+    drawGameOverScreen();
+    return;
+  }
 
   background(230);
   
@@ -350,24 +357,35 @@ void keyReleased(){
 
 
 void gameOver(){
+  isGameOver = true;
+}
 
-
+void drawGameOverScreen(){
   background(0);
-
-
   fill(255);
-
   textAlign(CENTER,CENTER);
-
   textSize(60);
-
   text(
     "GAME OVER",
     width/2,
-    height/2
+    height/2 - 40
   );
+  textSize(28);
+  text(
+    "Rキーでリスタート",
+    width/2,
+    height/2 + 40
+  );
+}
 
-
-  noLoop();
-
+void resetGame(){
+  player = new Player();
+  enemies.clear();
+  bullets.clear();
+  gates.clear();
+  leftKey = false;
+  rightKey = false;
+  enemyTimer = 0;
+  gateTimer = 0;
+  isGameOver = false;
 }
