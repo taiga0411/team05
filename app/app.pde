@@ -59,9 +59,11 @@ void draw() {
   gateTimer++;
 
   if (gateTimer > 300) {
+    
+    int level = frameCount / 600*5;   
 
     gates.add(
-      new Gate(random(100, width-100), -50)
+      new Gate(random(100, width-100), -50,level)
     );
 
     gateTimer = 0;
@@ -224,9 +226,10 @@ void draw() {
 
 
       if(dist(b.x,b.y,g.x,g.y)<50){
+        
+        
+        g.increase(b.attack);
 
-
-        g.damage(b.attack);
 
 
         bullets.remove(i);
