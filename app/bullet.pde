@@ -14,13 +14,16 @@ class Bullet {
   float size;
 
   // コンストラクタ
-  Bullet(float x, float y) {
+  Bullet(float x, float y, int attack) {
 
     this.x = x;
     this.y = y;
 
     speed = 8;
-    attack = 1;
+
+    // 人数分の攻撃力
+    this.attack = attack;
+
     size = 10;
   }
 
@@ -47,5 +50,4 @@ class Bullet {
   boolean isOut() {
     return y < -size;
   }
-
 }
