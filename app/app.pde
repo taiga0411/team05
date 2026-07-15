@@ -1,4 +1,5 @@
 Player player;
+PFont font;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
@@ -16,15 +17,13 @@ int gateTimer = 0;
 
 
 void setup() {
-
   size(800, 600);
-
+  font = createFont("Meiryo", 25);
+  textFont(font);
   player = new Player();
-
   enemies = new ArrayList<Enemy>();
   bullets = new ArrayList<Bullet>();
   gates = new ArrayList<Gate>();
-
 }
 
 
