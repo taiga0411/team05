@@ -15,6 +15,9 @@ boolean rightKey = false;
 int enemyTimer = 0;
 int gateTimer = 0;
 
+// 発射クールタイム
+int shotTimer = 0;
+int shotInterval = 20;   // 20フレームごとに発射
 
 void setup() {
   size(800, 600);
@@ -31,7 +34,8 @@ void setup() {
 void draw() {
 
   background(230);
-
+  
+  shotTimer++;
 
 
   //========================
@@ -300,37 +304,26 @@ void draw() {
 //========================
 
 
-void keyPressed(){
+void keyPressed() {
 
-
-  if(key=='a' || keyCode==LEFT){
-
-    leftKey=true;
-
+  if (key == 'a' || keyCode == LEFT) {
+    leftKey = true;
   }
 
-
-  if(key=='d' || keyCode==RIGHT){
-
-    rightKey=true;
-
+  if (key == 'd' || keyCode == RIGHT) {
+    rightKey = true;
   }
-
-
 
   // 発射
-
-  if(key==' '){
+  if (key == ' ' && shotTimer >= shotInterval) {
 
     bullets.add(
-      new Bullet(player.x,player.y-20)
+      new Bullet(player.x, player.y - 20, player.count)
     );
 
+    shotTimer = 0;
   }
-
-
 }
-
 
 
 
