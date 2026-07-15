@@ -1,56 +1,64 @@
 class Enemy {
 
-  // 座標
   float x;
   float y;
 
-  // 移動速度
   float speed;
-
-  // 体力
   int hp;
+ float size;
 
-  // 大きさ
-  float size;
-
-  // コンストラクタ
   Enemy(float x, float y) {
 
     this.x = x;
     this.y = y;
 
-    speed = 2;
-    hp = 3;
+    // 経過時間（秒）
+    int sec = frameCount / 60;
+
+    // HP：15秒ごとに+1
+    hp = 1 + sec / 15;
+
+    // Speed：10秒ごとに+0.2
+    speed = 2 + (sec / 10) * 0.2;
+
     size = 30;
   }
 
-  // 更新処理
   void update() {
     y += speed;
   }
 
-  // 描画
   void display() {
 
     pushMatrix();
-
     translate(x, y);
 
-    fill(255, 80, 80);
+    // HPに応じて色を変える
+    if (hp == 1) {
+      fill(255, 80, 80);      // 赤
+    } else if (hp == 2) {
+      fill(255, 150, 0);      // オレンジ
+    } else if (hp == 3) {
+      fill(255, 255, 0);      // 黄色
+    } else if (hp == 4) {
+      fill(100, 255, 100);    // 黄緑
+    } else if (hp == 5) {
+      fill(0, 200, 255);      // 水色
+    } else {
+      fill(180, 0, 255);      // 紫（HP6以上）
+    }
+
     stroke(0);
     ellipse(0, 0, size, size);
 
     popMatrix();
   }
 
-  // ダメージ
   void damage(int attack) {
     hp -= attack;
   }
 
-  // 倒されたか判定
   boolean isDead() {
     return hp <= 0;
   }
-
 }
