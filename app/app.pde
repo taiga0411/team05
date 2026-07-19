@@ -238,7 +238,7 @@ void draw() {
       if(dist(b.x,b.y,g.x,g.y)<50){
         
         
-        g.increase(b.attack);
+        g.increase();
 
 
 
@@ -298,6 +298,11 @@ void draw() {
     20,
     30
   );
+  
+  if (player.count <= 0) {
+  player.count = 0;
+  gameOver();
+}
 
 
 }
