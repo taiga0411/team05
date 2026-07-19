@@ -3,6 +3,7 @@ class Enemy {
   float x;
   float y;
 
+
   float speed;
   int hp;
   int maxHp;
