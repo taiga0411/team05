@@ -36,7 +36,7 @@ if (random(1) < 0.3) {
 
 } else {
   type = "-";
-  value = -(int(random(5 + level , 5 + level )));
+  value = -(int(random(2 + level , 4 + level )));
 }
   }
   // 更新
@@ -74,7 +74,7 @@ if (random(1) < 0.3) {
 
     fill(255);
     textAlign(CENTER, CENTER);
-    textSize(24);
+    textSize(25);
     String str;
 
 if (value >= 0) {
