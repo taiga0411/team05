@@ -10,10 +10,12 @@ ArrayList<Gate> gates;
 boolean leftKey = false;
 boolean rightKey = false;
 
-
+int roadOffset = 0;
 // 出現タイマー
 int enemyTimer = 0;
 int gateTimer = 0;
+
+int killCount = 0;
 
 boolean isGameOver = false;
 
@@ -34,14 +36,22 @@ void setup() {
 
 
 void draw() {
+ 
 
   if (isGameOver) {
     drawGameOverScreen();
     return;
   }
-
-  background(230);
   
+  
+background(90,180,90);
+
+stroke(255);
+strokeWeight(4);
+
+line(width/3,0,width/3,height);
+line(width*2/3,0,width*2/3,height);
+ 
   shotTimer++;
 
 
@@ -202,7 +212,12 @@ void draw() {
 
         if(e.isDead()){
 
-          enemies.remove(j);
+         if (e.isDead()) {
+
+  killCount += e.maxHp;
+  enemies.remove(j);
+
+}
 
         }
 
@@ -298,6 +313,11 @@ void draw() {
     20,
     30
   );
+  text(
+  "撃破数 : " + killCount,
+  20,
+  60
+);
   
   if (player.count <= 0) {
   player.count = 0;
@@ -395,6 +415,7 @@ void resetGame(){
   enemies.clear();
   bullets.clear();
   gates.clear();
+  killCount = 0;
   leftKey = false;
   rightKey = false;
   enemyTimer = 0;

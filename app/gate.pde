@@ -36,7 +36,7 @@ if (random(1) < 0.3) {
 
 } else {
   type = "-";
-  value = -(int(random(15 + level * 2, 30 + level * 3)));
+  value = -(int(random(5 + level , 5 + level )));
 }
   }
   // 更新
