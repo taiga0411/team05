@@ -87,9 +87,10 @@ text(str, x, y);
   }
 
 // 弾が当たったらゲートの値を増やす
-void increase(int attack) {
-  value += attack;
-}
+// 弾が当たった回数だけゲートの値を増やす
+void increase() {
+  value++;
+} 
   // プレイヤーに効果を適用
 void apply(Player player) {
   player.addCount(value);
