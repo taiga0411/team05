@@ -3,8 +3,10 @@ class Enemy {
   float x;
   float y;
 
+
   float speed;
   int hp;
+  int maxHp;
  float size;
 
   Enemy(float x, float y) {
@@ -17,6 +19,7 @@ class Enemy {
 
     // HP：15秒ごとに+1
     hp = 15 + sec / 1;
+    maxHp = hp;
 
     // Speed：10秒ごとに+0.2
     speed = 2 + (sec / 10) * 0.2;

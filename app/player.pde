@@ -64,13 +64,6 @@ class Player {
 
     count += num;
 
-
-    if(count < 1){
-
-      count = 1;
-
     }
 
   }
-
-}

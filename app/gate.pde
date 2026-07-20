@@ -29,12 +29,14 @@ class Gate {
     h = 60;
 
    // ランダムでゲートを生成
-if (random(1) < 0.5) {
+
+if (random(1) < 0.3) {
   type = "+";
   value = int(random(2, 8));
+
 } else {
   type = "-";
-  value = -int(random(2 + level, 8 + level));
+  value = -(int(random(2 + level , 4 + level )));
 }
   }
   // 更新
@@ -72,7 +74,7 @@ if (random(1) < 0.5) {
 
     fill(255);
     textAlign(CENTER, CENTER);
-    textSize(24);
+    textSize(25);
     String str;
 
 if (value >= 0) {
@@ -85,9 +87,10 @@ text(str, x, y);
   }
 
 // 弾が当たったらゲートの値を増やす
-void increase(int attack) {
-  value += attack;
-}
+// 弾が当たった回数だけゲートの値を増やす
+void increase() {
+  value++;
+} 
   // プレイヤーに効果を適用
 void apply(Player player) {
   player.addCount(value);
