@@ -1,5 +1,6 @@
 Player player;
 PFont font;
+GameState gameState;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
@@ -27,6 +28,7 @@ void setup() {
   enemies = new ArrayList<Enemy>();
   bullets = new ArrayList<Bullet>();
   gates = new ArrayList<Gate>();
+  gameState = new GameState();
 }
 
 
@@ -34,7 +36,19 @@ void setup() {
 void draw() {
 
   background(230);
-  
+
+  // スタート画面
+  if (gameState.isStart()) {
+    gameState.drawStartScreen();
+    return;
+  }
+
+  // ゲームオーバー画面
+  if (gameState.isGameOver()) {
+    gameState.drawGameOverScreen();
+    return;
+  }
+
   shotTimer++;
 
 
@@ -108,7 +122,7 @@ void draw() {
 
     if (dist(player.x, player.y, e.x, e.y) < 35) {
 
-      gameOver();
+      gameState.gameOver();
 
     }
 
@@ -306,6 +320,12 @@ void draw() {
 
 void keyPressed() {
 
+  // スタート／ゲームオーバー画面でのスペースキー
+  if ((gameState.isStart() || gameState.isGameOver()) && key == ' ') {
+    restartGame();
+    return;
+  }
+
   if (key == 'a' || keyCode == LEFT) {
     leftKey = true;
   }
@@ -347,27 +367,17 @@ void keyReleased(){
 }
 
 
+void restartGame() {
 
+  player = new Player();
+  enemies.clear();
+  bullets.clear();
+  gates.clear();
 
-void gameOver(){
+  enemyTimer = 0;
+  gateTimer = 0;
+  shotTimer = 0;
 
-
-  background(0);
-
-
-  fill(255);
-
-  textAlign(CENTER,CENTER);
-
-  textSize(60);
-
-  text(
-    "GAME OVER",
-    width/2,
-    height/2
-  );
-
-
-  noLoop();
+  gameState.startGame();
 
 }
