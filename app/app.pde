@@ -1,3 +1,5 @@
+import java.util.Collections;
+
 Player player;
 PFont font;
 GameState gameState;
@@ -5,6 +7,10 @@ GameState gameState;
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 ArrayList<Gate> gates;
+
+// スコア・ランキング（このスケッチを実行している間だけ保持）
+ArrayList<Integer> rankingList = new ArrayList<Integer>();
+int RANKING_MAX = 5; // 上位何件まで表示するか
 
 
 // キー入力
@@ -33,8 +39,6 @@ void setup() {
   gameState = new GameState();
 }
 
-
-
 void draw() {
  
 
@@ -47,6 +51,7 @@ void draw() {
   // ゲームオーバー画面
   if (gameState.isGameOver()) {
     gameState.drawGameOverScreen();
+    drawScoreAndRanking(); // スコア・ランキング表示
     return;
   }
 
@@ -76,8 +81,6 @@ line(width*2/3,0,width*2/3,height);
     enemyTimer = 0;
   }
 
-
-
   //========================
   // Gate生成
   //========================
@@ -95,17 +98,12 @@ line(width*2/3,0,width*2/3,height);
     gateTimer = 0;
   }
 
-
-
   //========================
   // Player
   //========================
 
   player.move(leftKey, rightKey);
   player.display();
-
-
-
 
   //========================
   // Enemy
@@ -125,80 +123,52 @@ line(width*2/3,0,width*2/3,height);
       enemies.remove(i);
 
     }
-
-
+    
     // EnemyとPlayer接触
-
     if (dist(player.x, player.y, e.x, e.y) < 35) {
 
-      gameState.gameOver();
-
+      endGame();
     }
-
   }
-
-
-
-
   //========================
   // Bullet
   //========================
 
   for (int i=bullets.size()-1; i>=0; i--) {
 
-
     Bullet b = bullets.get(i);
-
+    
     b.update();
     b.display();
 
-
     if (b.isOut()) {
-
       bullets.remove(i);
-
     }
 
   }
-
-
-
-
   //========================
   // Gate
   //========================
 
   for (int i=gates.size()-1; i>=0; i--) {
 
-
     Gate g = gates.get(i);
 
     g.update();
     g.display();
 
-
     if (g.isOut()) {
-
       gates.remove(i);
-
     }
 
   }
-
-
-
-
 
   //========================
   // Bullet × Enemy
   //========================
 
   for (int i=bullets.size()-1; i>=0; i--) {
-
-
     Bullet b = bullets.get(i);
-
-
     for (int j=enemies.size()-1; j>=0; j--) {
 
 
@@ -208,13 +178,9 @@ line(width*2/3,0,width*2/3,height);
 
       if (dist(b.x,b.y,e.x,e.y)<30) {
 
-
         e.damage(b.attack);
-
-
+        
         bullets.remove(i);
-
-
 
         if(e.isDead()){
 
@@ -222,96 +188,42 @@ line(width*2/3,0,width*2/3,height);
 
   killCount += e.maxHp;
   enemies.remove(j);
-
 }
-
         }
-
-
         break;
-
       }
-
     }
-
   }
-
-
-
-
-
-
 
   //========================
   // Bullet × Gate
   //========================
 
   for (int i=bullets.size()-1; i>=0; i--) {
-
-
     Bullet b = bullets.get(i);
-
-
-
     for(Gate g : gates){
-
-
       if(dist(b.x,b.y,g.x,g.y)<50){
-        
-        
         g.increase();
-
-
-
         bullets.remove(i);
-
-
         break;
-
       }
-
     }
-
   }
-
-
 
   for(int i=gates.size()-1;i>=0;i--){
-
-
     Gate g = gates.get(i);
-
-
-
     if(dist(player.x,player.y,g.x,g.y)<60){
-
-
-
       player.addCount(g.value);
-
-
       gates.remove(i);
-
-
     }
-
-
   }
-
-
-
-
-
-
 
   //========================
   // UI
   //========================
 
   fill(0);
-
   textSize(25);
-
   textAlign(LEFT);
 
   text(
@@ -320,28 +232,58 @@ line(width*2/3,0,width*2/3,height);
     30
   );
   text(
-  "撃破数 : " + killCount,
+  "撃破数（スコア） : " + killCount,
   20,
   60
 );
   
   if (player.count <= 0) {
   player.count = 0;
-  gameState.gameOver();
+  endGame();
+}
 }
 
-
+// ゲームオーバー処理をまとめる
+void endGame() {
+  if (!gameState.isGameOver()) {
+    addScoreToRanking(killCount);
+    gameState.gameOver();
+  }
 }
 
+// スコアをランキングに追加し、上位RANKING_MAX件だけ残す
+void addScoreToRanking(int score) {
+  rankingList.add(score);
+  Collections.sort(rankingList, Collections.reverseOrder());
+  while (rankingList.size() > RANKING_MAX) {
+    rankingList.remove(rankingList.size()-1);
+  }
+}
 
+// ゲームオーバー画面に今回のスコアとランキングを重ねて表示
+void drawScoreAndRanking() {
+  fill(255);
+  textAlign(CENTER, CENTER);
 
+  textSize(28);
+  text("今回のスコア : " + killCount, width/2, height/2 + 90);
 
+  textSize(22);
+  fill(255, 220, 0);
+  text("ランキング（このプレイ中）", width/2, height/2 + 130);
+
+  textSize(20);
+  fill(255);
+  for (int i = 0; i < rankingList.size(); i++) {
+    int score = rankingList.get(i);
+    String line = (i+1) + "位 : " + score;
+    text(line, width/2, height/2 + 160 + i * 26);
+  }
+}
 
 //========================
 // キー入力
 //========================
-
-
 void keyPressed() {
 
   // スタート／ゲームオーバー画面でのスペースキー
@@ -372,22 +314,13 @@ void keyPressed() {
 
 
 void keyReleased(){
-
-
   if(key=='a' || keyCode==LEFT){
-
     leftKey=false;
-
   }
-
 
   if(key=='d' || keyCode==RIGHT){
-
     rightKey=false;
-
   }
-
-
 }
 
 
@@ -403,6 +336,7 @@ void restartGame() {
   gateTimer = 0;
   shotTimer = 0;
 
+  // → スケッチを実行している間はランキングを保持し続ける
   gameState.startGame();
 
 }
