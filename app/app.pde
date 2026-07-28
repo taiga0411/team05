@@ -23,6 +23,7 @@ int enemyTimer = 0;
 int gateTimer = 0;
 
 int killCount = 0;
+int startFrame;
 
 // 発射クールタイム
 int shotTimer = 0;
@@ -37,6 +38,7 @@ void setup() {
   bullets = new ArrayList<Bullet>();
   gates = new ArrayList<Gate>();
   gameState = new GameState();
+  startFrame = frameCount;
 }
 
 void draw() {
@@ -89,7 +91,7 @@ line(width*2/3,0,width*2/3,height);
 
   if (gateTimer > 300) {
     
-    int level = frameCount / 600*5;   
+    int level = (frameCount - startFrame) / 600*5;   
 
     gates.add(
       new Gate(random(100, width-100), -50,level)
@@ -330,6 +332,8 @@ void restartGame() {
   enemies.clear();
   bullets.clear();
   gates.clear();
+  
+  startFrame = frameCount;
 
   killCount = 0;
   enemyTimer = 0;

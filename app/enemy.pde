@@ -15,7 +15,7 @@ class Enemy {
     this.y = y;
 
     // 経過時間（秒）
-    int sec = frameCount / 60;
+    int sec = (frameCount - startFrame) / 60;
 
     // HP：15秒ごとに+1
     hp = 15 + sec / 1;
